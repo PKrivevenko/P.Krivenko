@@ -1,0 +1,152 @@
+#контест "базовые понятия"
+1 задача:
+
+class Train
+{
+private:
+	double M;
+	double X = 0;
+	double V = 0;
+public:
+	// Создать паровоз массой m, 
+	// стоящий в начале координат
+	Train(double m) {
+		M = m;
+	}
+
+	// Ехать с текущей скоростью в течение времени dt
+	void move(double dt) {
+		X += V * dt;
+	}
+
+	// Изменить полный импульс паровоза (p = mv) на dp
+	// Изменение может менять знак скорости
+	void accelerate(double dp) {
+		V += dp / M;
+	}
+
+	// Получить текущую координату паровоза
+	double getX() {
+		return X;
+	}
+};
+
+
+2 задача:
+
+class GasHolder
+{
+private:
+	float V;
+	float T = 273;
+	float m1 = 0;
+	float M1 = 0;
+	float P = 0;
+	float *data;
+	float *data_mass;
+	int k = 0;
+public:
+	// Создать газгольдер заданного объёма.
+	// Температура созданного термостата равна 273 К.
+	GasHolder(float v) {
+		V = v;
+		data = new float[10];
+		data_mass = new float[10];
+	}
+
+	~GasHolder() {
+		delete[] data;
+		delete[] data_mass;
+	}
+
+	// Впрыск порции газа массой m и молярной массой M.
+	// Считать, что газ принимает текущую температуру газгольдера за пренебрежимо малое время.
+	void inject(float m, float M) {
+		m1 = m;
+		M1 = M;
+		P = (m1 / M1 * 8.31 * T) / V;
+		data[k] = P;
+		data_mass[k] = m1;
+		data_mass[k + 2] = M1;
+		k += 1;
+	}
+
+	// Подогреть газгольдер на dT градусов.
+	// Считать, что нагрев возможен до любых значений температуры.
+	void heat(float dT) {
+		T += dT;
+		for (int i = 0; i < k; i++) {
+			data[i] = (data_mass[i] / data_mass[i + 2] * 8.31 * T) / V;
+		}
+	}
+
+	// Охладить газгольдер на dT градусов.
+	// При попытке охладить ниже 0 К температура становится ровно 0 К.
+	void cool(float dT) {
+		T -= dT;
+		if (T <= 0) {
+			T = 0;
+		}
+		for (int i = 0; i < k; i++) {
+			data[i] = (data_mass[i] / data_mass[i + 2] * 8.31 * T) / V;
+		}
+	}
+
+	// Получить текущее давление в газгольдере.
+	// Считать, что для газа верно уравнение состояния PV = (m/M)RT. 
+	// Значение постоянной R принять 8.31 Дж/(моль*К).
+	float getPressure() {
+		float sum = 0;
+		for (int i = 0; i < k; i++) {
+			sum += data[i];
+		}
+		return sum;
+	}
+};
+
+
+3 задача:
+
+class SpacePort
+{
+private:
+	unsigned int a;
+	unsigned int b;
+	unsigned int c[100] = { 0 };
+public:
+	// Создать космодром, в котором size штук доков.
+	// Доки нумеруются от 0 до size-1.
+	// В момент создания все доки свободны.
+	SpacePort(unsigned int size) {
+		a = size;
+	}
+
+	// Запросить посадку в док с номером dockNumber.
+	bool requestLanding(unsigned int dockNumber){
+		b = dockNumber;
+		if (dockNumber < 0 || dockNumber > a - 1) {
+			return false;
+		}
+		if ((dockNumber <= a - 1) && (dockNumber >= 0) && (c[dockNumber] == 1)) {
+			return false;
+		}
+		else {
+			c[dockNumber] = 1;
+			return true;
+		}
+	}
+
+	// Запросить взлёт из дока с номером dockNumber.
+	bool requestTakeoff(unsigned int dockNumber) {
+		if (dockNumber < 0 || dockNumber > a - 1) {
+			return false;
+		}
+		if ((dockNumber <= a - 1) && (dockNumber >= 0) && (c[dockNumber] == 0)) {
+			return false;
+		}
+		else {
+			c[dockNumber] = 0;
+			return true;
+		}
+	}
+};
