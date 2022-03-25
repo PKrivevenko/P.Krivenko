@@ -1,0 +1,3 @@
+bool operator== (const student& x, const student& y) {
+    return x.id_number_string == y.id_number_string;
+}
