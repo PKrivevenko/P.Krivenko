@@ -1,0 +1,38 @@
+class ConvoyManager
+{
+private:
+    bool allowesBoarding;
+    bool allowesLoading;
+    unsigned int numberOfSeats;
+    unsigned int numberOfContainers;
+    unsigned int sum1 = 0;
+    unsigned int sum2 = 0;
+
+public:
+    static int sumofseats, sumofcontainers;
+    // Зарегистрировать новую машину в колонне
+    void registerCar(const Car& c){
+        allowesBoarding = c.isBoardingAllowed();
+        allowesLoading = c.isLoadingAllowed();
+        numberOfSeats = c.getNumberOfSeats();
+        numberOfContainers = c.getNumberOfContainers();
+        if (allowesBoarding == 1){
+            sumofseats += numberOfSeats;
+        }
+        if (allowesLoading == 1){
+            sumofcontainers += numberOfContainers;
+        }
+    }
+    ~ConvoyManager(){}
+    // Сообщить, сколько всего пассажиров может принять колонна
+    unsigned int getTotalSeats() {
+        return sumofseats;
+    }
+
+    // Сообщить, сколько всего грузовых контейнеров может взять колонна
+    unsigned int getTotalContainers() {
+        return sumofcontainers;
+    }
+};
+int ConvoyManager::sumofseats = 0;
+int ConvoyManager::sumofcontainers = 0;
