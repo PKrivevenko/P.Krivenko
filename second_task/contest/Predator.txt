@@ -1,0 +1,23 @@
+class Predator : public Animal{
+public:
+    Predator(double mass, double speed) {
+        this->mass = mass;
+        this->speed = speed;
+    }
+
+
+    ~Predator(){}
+
+    bool canAtack() const{
+        return true;
+    }
+    void eat(const Animal & a){
+        if((a.getMass() > mass)||(a.getSpeed() > speed)){
+            return;
+        }
+        else{
+            mass += a.getMass();
+        }
+    }
+
+};

@@ -1,0 +1,29 @@
+class Knight : public Player {
+public:
+    bool canUse(const Item& item) const{
+        if(item.isMagical() == 0 && strength >= item.getWeight() && level >= item.getLevel()){
+            return 1;
+        }
+        else{
+            return 0;
+        }
+    }
+    bool canCast() const{
+        return false;
+    }
+};
+
+class Wizard : public Player {
+public:
+    bool canUse(const Item& item) const{
+        if(strength >= item.getWeight() && level >= item.getLevel()){
+            return 1;
+        }
+        else{
+            return 0;
+        }
+    }
+    bool canCast() const{
+        return true;
+    }
+};
