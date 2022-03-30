@@ -1,0 +1,63 @@
+#include <iostream>
+#include <string>
+#include <map>
+using namespace std;
+class TelemetryController
+{
+    std::multimap<std::string, long> events;
+public:
+    // Получить и обработать событие. Параметрами передаются:
+    // - device - идентификатор устройства, с которого пришло значение;
+    // - value - собственно значение некоторой величины, переданное устройством.
+    void handleEvent(const string& device, long value){
+        events.insert(make_pair(device, value));
+    }
+
+    // По идентификатору устройства возвращает,
+    // сколько всего значений от него пришло за всё время
+    unsigned int getEventsCount(const string& device) const{
+        return events.count(device);
+    }
+
+    // По идентификатору устройства возвращает
+    // минимальное значение за всё время, пришедшее от данного устройства
+    long getMinValue(const string& device) const{
+        long min = 10000;
+        for(const auto & it : events){
+            if(it.first == device){
+                if(it.second <= min){
+                    min = it.second;
+                }
+            }
+        }
+        return min;
+    }
+
+    // По идентификатору устройства возвращает
+    // максимальное значение за всё время, пришедшее от данного устройства
+    long getMaxValue(const string& device) const{
+        long max = -100;
+        for(const auto & it : events){
+            if(it.first == device){
+                if(it.second >= max){
+                    max = it.second;
+                }
+            }
+        }
+        return max;
+    }
+};
+
+int main() {
+    TelemetryController tc;
+
+    tc.handleEvent("d1", 42);
+    tc.handleEvent("d1", -42);
+    tc.handleEvent("d2", 100);
+
+
+    std::cout << "Events count for d1: " << tc.getEventsCount("d1") << std::endl;
+    std::cout << "Min value for d1: " << tc.getMinValue("d1") << std::endl;
+    std::cout << "Max value for d1: " << tc.getMaxValue("d1") << std::endl;
+    return 0;
+}

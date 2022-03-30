@@ -1,0 +1,73 @@
+#include <iostream>
+#include <string>
+#include <map>
+using namespace std;
+class Animal {
+public:
+    virtual string getType() const = 0;
+    virtual ~Animal() {}
+};
+class Monkey : public Animal{
+public:
+    Monkey(){}
+    string getType() const{
+        return  "monkey";
+    }
+    ~Monkey(){}
+
+};
+
+class Lion : public Animal{
+public:
+    Lion(){}
+    string getType() const{
+        return  "lion";
+    }
+    ~Lion(){}
+};
+class ZooKeeper {
+    map<string, int> animals;
+    string s;
+public:
+    // Создаём смотрителя зоопарка
+    ZooKeeper(){}
+
+    // Смотрителя попросили обработать очередного зверя.
+    void handleAnimal(const Animal& a){
+        if(s == a.getType()){
+            animals[a.getType()] ++;
+        }
+        animals.insert(make_pair((a.getType()), 1));
+        s = a.getType();
+    }
+
+    // Возвращает, сколько зверей такого типа было обработано.
+    // Если таких не было, возвращает 0.
+    int getAnimalCount(const string& type) const{
+        auto it = animals.find(type);
+        if(it->first == type){
+            return it->second;
+        }
+        else{
+            return 0;
+        }
+
+    }
+};
+
+int main() {
+    ZooKeeper z;
+    Animal *a = new Monkey();
+    z.handleAnimal(*a);
+    delete a;
+    a = new Monkey();
+    z.handleAnimal(*a);
+    delete a;
+    a = new Lion();
+    z.handleAnimal(*a);
+    delete a;
+    cout << z.getAnimalCount("monkey") << endl;
+    cout << z.getAnimalCount("lion") << endl;
+    cout << z.getAnimalCount("cat") << endl;
+    return 0;
+}
