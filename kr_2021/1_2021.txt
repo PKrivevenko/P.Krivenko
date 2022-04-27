@@ -1,0 +1,23 @@
+#include <iostream>
+#include<cmath>
+using namespace std;
+
+class Sphere
+{
+public:
+    // Конструктор сферы с центром в точке center и радиусом r
+    Sphere(const Point& center, double r) : x(center.x()), y(center.y()), z(center.z()), r(r) {}
+
+    // Проверка, попадает ли заданная точка p в данную сферу.
+    // (Расстояния сравнивать с точностью 1e-6.)
+    bool covers(const Point& p) const{
+        if(sqrt(pow(p.x() - x, 2) + pow(p.y() - y, 2) + pow(p.z() - z, 2)) - r <= 0.000006){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+private:
+    double x, y, z, r;
+};

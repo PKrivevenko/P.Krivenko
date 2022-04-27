@@ -1,0 +1,31 @@
+#include <iostream>
+#include<vector>
+#include <algorithm>
+using namespace std;
+int main(){
+    int n;
+    cin >> n;
+    vector<int>v;
+    for(int i = 0; i < n; i++){
+        int temp;
+        cin >> temp;
+        v.push_back(temp);
+    }
+
+    vector<int>index;
+    for(unsigned int i = 0; i < v.size() ; i++){
+        for(unsigned int j = 0; j < v.size(); j++){
+            if((v[j] == v[i]) && (i != j)){
+                index.push_back(i);
+            }
+        }
+    }
+
+//    auto l = std::unique(index.begin(), index.end());
+//    index.erase(l, index.end());
+    for(auto it : index){
+        v[it]= -100;
+    }
+    cout << *std::max_element(v.begin(), v.end());
+    return 0;
+}

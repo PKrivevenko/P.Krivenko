@@ -1,0 +1,90 @@
+#include <string>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<map>
+using namespace std;
+template<typename T>
+std::ostream & operator <<(ostream & os, vector<T> v) {
+    for(auto const & it : v){
+        cout << it << endl;
+    }
+    return os;
+}
+char my_tolower(char ch)
+{
+    return static_cast<char>(tolower(static_cast<unsigned char>(ch)));
+}
+
+int main(){
+    int n;
+    cin >> n;
+    vector<string> words;
+    for(int i = 0; i < n; i++){
+        string temp;
+        cin >> temp;
+        words.push_back(temp);
+    }
+    std::sort(words.begin(), words.end());
+    auto l = std::unique(words.begin(), words.end());
+    words.erase(l, words.end());
+    for(unsigned int i = 0; i < words.size(); ++i){
+        for(unsigned int j = 0; j< words[i].size(); j++){
+            if(65 <= (int)words[i][j] ){
+                words[i][j] = my_tolower(words[i][j]);
+            }
+        }
+    }
+    std::sort(words.begin(), words.end());
+    vector<string>p;
+    int c = 1;
+    for(unsigned int i = 0; i < words.size() - 1;i++){
+        if(words[i] == words[i + 1]){
+            c ++;
+            if(c > 2){
+                p.push_back(words[i]);
+            }
+        }
+        else{
+            c = 1;
+        }
+    }
+    if(p.size() > 0){
+        for(unsigned int i = 0; i < p.size() - 1; i++){
+            auto k = std::count(p.begin(), p.end(), p[i]);
+            auto b = std::count(p.begin(), p.end(), p[i + 1]);
+
+            if((k == b)&&((int)p[i + 1][0] <= (int)p[i][0])){
+                string temp;
+                temp = p[i];
+                p[i] = p[i + 1];
+                p[i + 1] = temp;
+            }
+            if((k == b)&&((int)p[i + 1][0] == (int)p[i][0])){
+                p.erase(p.begin() + i + 1, p.end());
+            }
+            if(k < b){
+                string temp;
+                temp = p[i];
+                p[i] = p[i + 1];
+                p[i + 1] = temp;
+            }
+        }
+        for(unsigned int i = 0; i < p.size() - 1; i++){
+            auto k = std::count(p.begin(), p.end(), p[i]);
+            auto b = std::count(p.begin(), p.end(), p[i + 1]);
+            if(k < b){
+                string temp;
+                temp = p[i];
+                p[i] = p[i + 1];
+                p[i + 1] = temp;
+            }
+        }
+
+        auto m = std::unique(p.begin(), p.end());
+        p.erase(m, p.end());
+        cout << p;
+    }
+
+    return 0;
+}

@@ -1,0 +1,41 @@
+#include <iostream>
+#include<vector>
+#include<exception>
+using namespace std;
+class GasStation {
+public:
+    GasStation(unsigned int N) : N(0), maxvalue(N){}
+    // Конструктор, принимающий один параметр - ёмкость резервуара колонки
+    // Резервуар создаётся пустой
+
+    // Залить в резервуар колонки n литров топлива
+    // Если столько не влезает в резервуар - не заливать ничего, выбросить std::exception
+    void fill(unsigned int n){
+        if(N + n > maxvalue){
+            throw std::exception();
+        }
+        else{
+            N += n;
+        }
+    }
+
+    // Заправиться, забрав при этом из резервура n литров топлива
+    // Если столько нет в резервуаре - не забирать из резервуара ничего, выбросить std::exception
+    void tank(unsigned int n){
+        if(N >= n){
+            N -= n;
+        }
+        else{
+            throw std::exception();
+        }
+    }
+
+    // Запросить остаток топлива в резервуаре
+    unsigned int get_limit() const{
+        return N;
+    }
+private:
+    unsigned int N;
+    unsigned int maxvalue;
+};
+
